@@ -1,0 +1,66 @@
+# OAuth example
+# ------------
+# development:
+#   strategy: oauth
+#   oauth_consumer_key: devkey
+#   oauth_consumer_secret: devsecret
+#   base_url: "http://api.stocktwits.com"
+#   authorize_path: "/oauth/authenticate"
+#   api_timeout: 10
+#   remember_for: 14 # days
+#   oauth_callback: "http://localhost:3000/oauth_callback"
+# test:
+#   strategy: oauth
+#   oauth_consumer_key: testkey
+#   oauth_consumer_secret: testsecret
+#   base_url: "http://api.stocktwits.com"
+#   authorize_path: "/oauth/authenticate"
+#   api_timeout: 10
+#   remember_for: 14 # days
+#   oauth_callback: "http://localhost:3000/oauth_callback"
+# production:
+#   strategy: oauth
+#   oauth_consumer_key: prodkey
+#   oauth_consumer_secret: prodsecret 
+#   authorize_path: "/oauth/authenticate"
+#   base_url: "http://api.stocktwits.com"
+#   api_timeout: 10
+#   remember_for: 14 # days
+
+# Basic Example
+# -------------
+# development:
+#   strategy: basic
+#   api_timeout: 10
+#   base_url: "http://api.stocktwits.com"
+#   # randomly generated key for encrypting Stocktwits passwords
+#   encryption_key: "<%= key = ActiveSupport::SecureRandom.hex(12) %>"
+#   remember_for: 14 # days
+# test:
+#   strategy: basic
+#   api_timeout: 10
+#   base_url: "http://api.stocktwits.com"
+#   encryption_key: "<%= key %>"
+#   remember_for: 14 # days
+# production:
+#   strategy: basic
+#   api_timeout: 10
+#   encryption_key: "<%= key %>"
+#   remember_for: 14 # days
+
+# Plain Example
+# -------------
+# development:
+#   strategy: plain
+#   api_timeout: 10
+#   base_url: "http://api.stocktwits.com"
+#   remember_for: 14 # days
+# test:
+#   strategy: basic
+#   api_timeout: 10
+#   base_url: "http://api.stocktwits.com"
+#   remember_for: 14 # days
+# production:
+#   strategy: basic
+#   api_timeout: 10
+#   remember_for: 14 # days

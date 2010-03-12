@@ -19,7 +19,9 @@ module Stocktwits
   end
   
   def self.encryption_key
-    raise TwitterAuth::Cryptify::Error, 'You must specify an encryption_key in config/stocktwits.yml' if config['encryption_key'].blank?
+    if strategy != :plain
+      raise TwitterAuth::Cryptify::Error, 'You must specify an encryption_key in config/stocktwits.yml' if config['encryption_key'].blank?
+    end
     config['encryption_key'] 
   end
   
