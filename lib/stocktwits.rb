@@ -36,15 +36,23 @@ module Stocktwits
   end
   
   def self.strategy
-    :oauth
+    strat = config['strategy']
+    raise ArgumentError, 'Invalid StockTwits Strategy: Valid strategies are oauth and basic.' unless %w(oauth basic plain).include?(strat)
+    strat.to_sym
+  rescue Errno::ENOENT
+    :basic
   end
   
   def self.oauth?
     strategy == :oauth
   end
   
-  def self.no_auth?
-    strategy == :no_auth
+  def self.basic?
+    strategy == :basic
+  end
+  
+  def self.plain?
+    strategy == :plain
   end
   
   def self.consumer

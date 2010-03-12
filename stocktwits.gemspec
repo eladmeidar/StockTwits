@@ -47,15 +47,18 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<thoughtbot-shoulda>, [">= 0"])
       s.add_dependency("json")
       s.add_dependency("oauth")
+      s.add_dependenty("ezcrypto")
     else
       s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
       s.add_dependency("json")
       s.add_dependency("oauth")
+      s.add_dependenty("ezcrypto")
     end
   else
     s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
     s.add_dependency("json")
     s.add_dependency("oauth")
+    s.add_dependenty("ezcrypto")
   end
 end
 
