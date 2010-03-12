@@ -33,10 +33,50 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.5}
-  s.summary = %q{TODO: one-line summary of your gem}
-  s.test_files = [
-    "test/helper.rb",
-     "test/test_stocktwits.rb"
+  s.summary = %q{ Stocktwits API wrapper }
+  s.files = [
+    "CHANGELOG.markdown",
+     "README.markdown",
+     "Rakefile",
+     "VERSION.yml",
+     "app/controllers/sessions_controller.rb",
+     "app/models/stocktwits/basic_user.rb",
+     "app/models/stocktwits/generic_user.rb",
+     "app/models/stocktwits/oauth_user.rb",
+     "app/models/stocktwits/plain_user.rb",
+     "app/views/sessions/_login_form.html.erb",
+     "app/views/sessions/new.html.erb",
+     "config/routes.rb",
+     "generators/stocktwits/USAGE",
+     "generators/stocktwits/templates/migration.rb",
+     "generators/stocktwits/templates/stocktwits.yml",
+     "generators/stocktwits/templates/user.rb",
+     "generators/stocktwits/stocktwits_generator.rb",
+     "lib/stocktwits.rb",
+     "lib/stocktwits/controller_extensions.rb",
+     "lib/stocktwits/cryptify.rb",
+     "lib/stocktwits/dispatcher/basic.rb",
+     "lib/stocktwits/dispatcher/plain.rb",
+     "lib/stocktwits/dispatcher/oauth.rb",
+     "lib/stocktwits/dispatcher/shared.rb",
+     "rails/init.rb",
+     "spec/controllers/controller_extensions_spec.rb",
+     "spec/controllers/sessions_controller_spec.rb",
+     "spec/fixtures/config/stocktwits.yml",
+     "spec/fixtures/factories.rb",
+     "spec/fixtures/fakeweb.rb",
+     "spec/fixtures/twitter.rb",
+     "spec/models/stocktwits/basic_user_spec.rb",
+     "spec/models/stocktwits/generic_user_spec.rb",
+     "spec/models/stocktwits/oauth_user_spec.rb",
+     "spec/schema.rb",
+     "spec/spec.opts",
+     "spec/spec_helper.rb",
+     "spec/stocktwits/cryptify_spec.rb",
+     "spec/stocktwits/dispatcher/basic_spec.rb",
+     "spec/stocktwits/dispatcher/oauth_spec.rb",
+     "spec/stocktwits/dispatcher/shared_spec.rb",
+     "spec/stocktwits_spec.rb"
   ]
 
   if s.respond_to? :specification_version then

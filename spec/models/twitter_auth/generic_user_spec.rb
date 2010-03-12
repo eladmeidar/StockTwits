@@ -1,72 +1,72 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe TwitterAuth::GenericUser do
-  should_validate_presence_of :login, :twitter_id
+describe Stocktwits::GenericUser do
+  should_validate_presence_of :login, :stocktwits_id
   should_validate_format_of :login, 'some_guy', 'awesome', 'cool_man'
   should_not_validate_format_of :login, 'with-dashes', 'with.periods', 'with spaces'
   should_validate_length_of :login, :in => 1..15
   
   it 'should validate uniqueness of login' do
-    Factory.create(:twitter_oauth_user)
-    Factory.build(:twitter_oauth_user).should have_at_least(1).errors_on(:login)
+    Factory.create(:stocktwits_oauth_user)
+    Factory.build(:stocktwits_oauth_user).should have_at_least(1).errors_on(:login)
   end
 
   it 'should validate uniqueness of remember_token' do
-    Factory.create(:twitter_oauth_user, :remember_token => 'abc')
-    Factory.build(:twitter_oauth_user, :remember_token => 'abc').should have_at_least(1).errors_on(:remember_token)
+    Factory.create(:stocktwits_oauth_user, :remember_token => 'abc')
+    Factory.build(:stocktwits_oauth_user, :remember_token => 'abc').should have_at_least(1).errors_on(:remember_token)
   end
 
   it 'should allow capital letters in the username' do
-    Factory.build(:twitter_oauth_user, :login => 'TwitterMan').should have(:no).errors_on(:login)
+    Factory.build(:stocktwits_oauth_user, :login => 'TwitterMan').should have(:no).errors_on(:login)
   end
 
   it 'should not allow the same login with different capitalization' do
-    Factory.create(:twitter_oauth_user, :login => 'twitterman')
-    Factory.build(:twitter_oauth_user, :login => 'TwitterMan').should have_at_least(1).errors_on(:login)
+    Factory.create(:stocktwits_oauth_user, :login => 'stocktwitsman')
+    Factory.build(:stocktwits_oauth_user, :login => 'TwitterMan').should have_at_least(1).errors_on(:login)
   end
 
-  describe '.new_from_twitter_hash' do
+  describe '.new_from_stocktwits_hash' do
     it 'should raise an argument error if the hash does not have a screen_name attribute' do
-      lambda{User.new_from_twitter_hash({'id' => '123'})}.should raise_error(ArgumentError, 'Invalid hash: must include screen_name.')
+      lambda{User.new_from_stocktwits_hash({'id' => '123'})}.should raise_error(ArgumentError, 'Invalid hash: must include screen_name.')
     end
 
     it 'should raise an argument error if the hash does not have an id attribute' do
-      lambda{User.new_from_twitter_hash({'screen_name' => 'abc123'})}.should raise_error(ArgumentError, 'Invalid hash: must include id.')
+      lambda{User.new_from_stocktwits_hash({'screen_name' => 'abc123'})}.should raise_error(ArgumentError, 'Invalid hash: must include id.')
     end
 
     it 'should return a user' do
-      User.new_from_twitter_hash({'id' => '123', 'screen_name' => 'twitterman'}).should be_a(User)
+      User.new_from_stocktwits_hash({'id' => '123', 'screen_name' => 'stocktwitsman'}).should be_a(User)
     end
 
     it 'should assign login to the screen_name' do
-      User.new_from_twitter_hash({'id' => '123', 'screen_name' => 'twitterman'}).login.should == 'twitterman'
+      User.new_from_stocktwits_hash({'id' => '123', 'screen_name' => 'stocktwitsman'}).login.should == 'stocktwitsman'
     end
 
-    it 'should assign twitter attributes that are provided' do
-      u = User.new_from_twitter_hash({'id' => '4566', 'screen_name' => 'twitterman', 'name' => 'Twitter Man', 'description' => 'Saving the world for all Tweet kind.'})
+    it 'should assign stocktwits attributes that are provided' do
+      u = User.new_from_stocktwits_hash({'id' => '4566', 'screen_name' => 'stocktwitsman', 'name' => 'Twitter Man', 'description' => 'Saving the world for all Tweet kind.'})
       u.name.should == 'Twitter Man'
       u.description.should == 'Saving the world for all Tweet kind.'
     end
   end
 
-  describe '#update_twitter_attributes' do
+  describe '#update_stocktwits_attributes' do
     it 'should assign values to the user' do
-      user = Factory.create(:twitter_oauth_user, :name => "Dude", :description => "Awesome, man.")
-      user.update_twitter_attributes({'name' => 'Twitter Man', 'description' => 'Works.'})
+      user = Factory.create(:stocktwits_oauth_user, :name => "Dude", :description => "Awesome, man.")
+      user.update_stocktwits_attributes({'name' => 'Twitter Man', 'description' => 'Works.'})
       user.reload
       user.name.should == 'Twitter Man'
       user.description.should == 'Works.'
     end
 
     it 'should not throw an error with extraneous info' do
-      user = Factory.create(:twitter_oauth_user, :name => "Dude", :description => "Awesome, man.")
-      lambda{user.update_twitter_attributes({'name' => 'Twitter Man', 'description' => 'Works.', 'whoopsy' => 'noworks.'})}.should_not raise_error
+      user = Factory.create(:stocktwits_oauth_user, :name => "Dude", :description => "Awesome, man.")
+      lambda{user.update_stocktwits_attributes({'name' => 'Twitter Man', 'description' => 'Works.', 'whoopsy' => 'noworks.'})}.should_not raise_error
     end
   end
 
   describe '#remember_me' do
     before do
-      @user = Factory(:twitter_oauth_user)
+      @user = Factory(:stocktwits_oauth_user)
     end
 
     it 'should check for the remember_token column' do
@@ -87,7 +87,7 @@ describe TwitterAuth::GenericUser do
       end
 
       it 'should set the expiration to the current time plus the remember_for period' do
-        TwitterAuth.stub!(:remember_for).and_return(10)
+        Stocktwits.stub!(:remember_for).and_return(10)
         time = Time.now
         Time.stub!(:now).and_return(time)
 
@@ -104,7 +104,7 @@ describe TwitterAuth::GenericUser do
       end
 
       it 'should return a hash with appropriate values' do
-        TwitterAuth.stub!(:remember_for).and_return(10)
+        Stocktwits.stub!(:remember_for).and_return(10)
         time = Time.now
         Time.stub!(:now).and_return(time)
         ActiveSupport::SecureRandom.stub!(:hex).and_return('abcdef')
@@ -116,7 +116,7 @@ describe TwitterAuth::GenericUser do
 
   describe '#forget_me' do
     it 'should reset remember_token and remember_token_expires_at' do
-      @user = Factory(:twitter_oauth_user, :remember_token => "abcdef", :remember_token_expires_at => Time.now + 10.days)
+      @user = Factory(:stocktwits_oauth_user, :remember_token => "abcdef", :remember_token_expires_at => Time.now + 10.days)
       @user.forget_me
       @user.reload
       @user.remember_token.should be_nil
@@ -126,7 +126,7 @@ describe TwitterAuth::GenericUser do
 
   describe '.from_remember_token' do
     before do
-      @user = Factory(:twitter_oauth_user, :remember_token => 'abcdef', :remember_token_expires_at => (Time.now + 10.days))
+      @user = Factory(:stocktwits_oauth_user, :remember_token => 'abcdef', :remember_token_expires_at => (Time.now + 10.days))
     end
 
     it 'should find the user with the specified remember_token' do
@@ -134,12 +134,12 @@ describe TwitterAuth::GenericUser do
     end
 
     it 'should not find a user with an expired token' do
-      user2 = Factory(:twitter_oauth_user, :login => 'walker', :remember_token => 'ghijkl', :remember_token_expires_at => (Time.now - 10.days))
+      user2 = Factory(:stocktwits_oauth_user, :login => 'walker', :remember_token => 'ghijkl', :remember_token_expires_at => (Time.now - 10.days))
       User.from_remember_token('ghijkl').should be_nil
     end
 
     it 'should not find a user with a nil token and an expiration' do
-      user = Factory(:twitter_oauth_user, :login => 'stranger', :remember_token => nil, :remember_token_expires_at => (Time.now + 10.days))
+      user = Factory(:stocktwits_oauth_user, :login => 'stranger', :remember_token => nil, :remember_token_expires_at => (Time.now + 10.days))
       User.from_remember_token(nil).should be_nil
     end
   end

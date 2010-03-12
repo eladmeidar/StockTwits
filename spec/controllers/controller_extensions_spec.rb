@@ -4,7 +4,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect ':controller/:action/:id'
 end
 
-class TwitterAuthTestController < ApplicationController
+class StocktwitsTestController < ApplicationController
   before_filter :login_required, :only => [:login_required_action]
 
   def login_required_action
@@ -42,7 +42,7 @@ class TwitterAuthTestController < ApplicationController
   end
 end
 
-describe TwitterAuthTestController do
+describe StocktwitsTestController do
   before do
     controller.stub!(:cookies).and_return({})
   end
@@ -79,14 +79,14 @@ describe TwitterAuthTestController do
 
   describe '#current_user' do
     it 'should find the user based on the session user_id' do
-      user = Factory.create(:twitter_oauth_user)
+      user = Factory.create(:stocktwits_oauth_user)
       request.session[:user_id] = user.id
       get(:current_user_action)
       assigns[:user].should == user
     end
 
     it 'should log the user in through a cookie' do
-      user = Factory(:twitter_oauth_user, :remember_token => 'abc', :remember_token_expires_at => (Time.now + 10.days))
+      user = Factory(:stocktwits_oauth_user, :remember_token => 'abc', :remember_token_expires_at => (Time.now + 10.days))
       controller.stub!(:cookies).and_return({:remember_token => 'abc'})
       get :current_user_action
       assigns[:user].should == user
@@ -101,7 +101,7 @@ describe TwitterAuthTestController do
 
   describe "#authorized?" do
     it 'should be true if there is a current_user' do
-      user = Factory.create(:twitter_oauth_user)
+      user = Factory.create(:stocktwits_oauth_user)
       controller.stub!(:current_user).and_return(user)
       controller.send(:authorized?).should be_true
     end
@@ -139,7 +139,7 @@ describe TwitterAuthTestController do
 
   describe 'logout_keeping_session!' do
     before do
-      @user = Factory.create(:twitter_oauth_user)
+      @user = Factory.create(:stocktwits_oauth_user)
       request.session[:user_id] = @user.id
     end
 

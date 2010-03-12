@@ -53,11 +53,11 @@ describe SessionsController do
       end
 
       it 'should redirect to the oauth_callback if one is specified' do
-        TwitterAuth.stub!(:oauth_callback).and_return('http://localhost:3000/development')
-        TwitterAuth.stub!(:oauth_callback?).and_return(true)        
+        Stocktwits.stub!(:oauth_callback).and_return('http://localhost:3000/development')
+        Stocktwits.stub!(:oauth_callback?).and_return(true)        
 
         get :new
-        response.should redirect_to('https://twitter.com/oauth/authorize?oauth_token=faketoken&oauth_callback=' + CGI.escape(TwitterAuth.oauth_callback))
+        response.should redirect_to('https://twitter.com/oauth/authorize?oauth_token=faketoken&oauth_callback=' + CGI.escape(Stocktwits.oauth_callback))
       end
     end
 
@@ -95,7 +95,7 @@ describe SessionsController do
 
         describe 'building the access token' do
           it 'should rebuild the request token' do
-            correct_token =  OAuth::RequestToken.new(TwitterAuth.consumer,'faketoken','faketokensecret')
+            correct_token =  OAuth::RequestToken.new(Stocktwits.consumer,'faketoken','faketokensecret')
             
             %w(token secret).each do |att|
               assigns[:request_token].send(att).should == correct_token.send(att)
@@ -137,7 +137,7 @@ describe SessionsController do
           before do
             request.session[:request_token] = 'faketoken'
             request.session[:request_token_secret] = 'faketokensecret'
-            @request_token =  OAuth::RequestToken.new(TwitterAuth.consumer, session[:request_token], session[:request_token_secret])
+            @request_token =  OAuth::RequestToken.new(Stocktwits.consumer, session[:request_token], session[:request_token_secret])
             OAuth::RequestToken.stub!(:new).and_return(@request_token)
           end
 
