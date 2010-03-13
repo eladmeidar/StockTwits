@@ -13,7 +13,7 @@ module Stocktwits
                          "followers_count", 
                          "recommended", 
                          "bio", 
-                         "login", 
+                         # "login", 
                          "first_name"]
                          
     STOCKTWITS_PROFILE_FIELDS = ["approach",
