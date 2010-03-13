@@ -1,9 +1,9 @@
 module Stocktwits
   class Error < StandardError; end
   
-  def self.config(environment=RAILS_ENV)
+  def self.config(environment=Rails.env)
     @config ||= {}
-    @config[environment] ||= YAML.load(File.open(RAILS_ROOT + '/config/stocktwits.yml').read)[environment]
+    @config[environment] ||= YAML.load(File.open(Rails.root + '/config/stocktwits.yml').read)[environment]
   end
 
   def self.base_url
@@ -20,7 +20,7 @@ module Stocktwits
   
   def self.encryption_key
     if strategy != :plain
-      raise TwitterAuth::Cryptify::Error, 'You must specify an encryption_key in config/stocktwits.yml' if config['encryption_key'].blank?
+      raise Stocktwits::Cryptify::Error, 'You must specify an encryption_key in config/stocktwits.yml' if config['encryption_key'].blank?
     end
     config['encryption_key'] 
   end
@@ -89,8 +89,11 @@ end
 
 require 'stocktwits/controller_extensions'
 require 'stocktwits/cryptify'
-require 'stocktwits/dispatcher/oauth'
 require 'stocktwits/dispatcher/shared'
+require 'stocktwits/dispatcher/oauth'
+require 'stocktwits/dispatcher/basic'
+require 'stocktwits/dispatcher/plain'
+
 
 module Stocktwits
   module Dispatcher
