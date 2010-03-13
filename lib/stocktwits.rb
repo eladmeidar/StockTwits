@@ -3,6 +3,7 @@ module Stocktwits
   
   def self.config(environment=Rails.env)
     @config ||= {}
+    puts "Rails root: #{Rails.root}"
     @config[environment] ||= YAML.load(File.open(Rails.root + '/config/stocktwits.yml').read)[environment]
   end
 

@@ -1,4 +1,4 @@
-class TwitterAuthGenerator < Rails::Generator::Base
+class StocktwitsGenerator < Rails::Generator::Base
   default_options :oauth => false, :basic => false, :plain => true
 
   def manifest
