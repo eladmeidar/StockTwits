@@ -2,6 +2,40 @@ module Stocktwits
   class GenericUser < ActiveRecord::Base
     attr_protected :stocktwits_id, :remember_token, :remember_token_expires_at
     
+    STOCKTWITS_FIELDS = ["avatar_url_thumb", 
+                         "avatar_url_medium", 
+                         #"profile", 
+                         "following_count", 
+                         #"id", 
+                         "updates_count", 
+                         "avatar_url_large", 
+                         "last_name", 
+                         "followers_count", 
+                         "recommended", 
+                         "bio", 
+                         "login", 
+                         "first_name"]
+                         
+    STOCKTWITS_PROFILE_FIELDS = ["approach",
+                                 "location",
+                                 "title",
+                                 "risk_profile",
+                                 "focus",
+                                 #"id",
+                                 "long_short",
+                                 "qualifications",
+                                 "user_id",
+                                 "investment_style",
+                                 "website",
+                                 "asset_classes_traded",
+                                 "bio",
+                                 "capitalization_bias",
+                                 "holding_period",
+                                 "education",
+                                 "industry",
+                                 "personal_interests",
+                                 "trading_experience"]
+                                 
     # with_options :if => :utilize_default_validations do |v|
     #   v.validates_presence_of :login, :stocktwits_id
     #   v.validates_format_of :login, :with => /\A[a-z0-9_]+\z/i
@@ -14,18 +48,16 @@ module Stocktwits
     def self.table_name; 'users' end
 
     def self.new_from_stocktwits_hash(hash)
-      raise ArgumentError, 'Invalid hash: must include screen_name.' unless hash.key?('screen_name')
+      raise ArgumentError, 'Invalid hash: must include screen_name.' unless hash.key?('login')
 
       raise ArgumentError, 'Invalid hash: must include id.' unless hash.key?('id')
 
       user = User.new
       user.stocktwits_id = hash['id'].to_s
-      user.login = hash['screen_name']
+      user.login = hash['login']
 
-      stocktwits_ATTRIBUTES.each do |att|
-        user.send("#{att}=", hash[att.to_s]) if user.respond_to?("#{att}=")
-      end
-
+      assign_stocktwits_attributes(hash)
+      
       user
     end
 
@@ -34,9 +66,13 @@ module Stocktwits
     end
       
     def assign_stocktwits_attributes(hash)
-      # stocktwits_ATTRIBUTES.each do |att|
-      #   send("#{att}=", hash[att.to_s]) if respond_to?("#{att}=")
-      # end
+      STOCKTWITS_FIELDS.each do |att|
+        user.send("#{att}=", hash[att.to_s]) if user.respond_to?("#{att}=")
+      end
+      
+      STOCKTWITS_PROFILE_FIELDS.each do |att|
+        user.send("#{att}=", hash['profile'][att.to_s]) if user.respond_to?("#{att}=")
+      end
     end
 
     def update_stocktwits_attributes(hash)
