@@ -1,16 +1,20 @@
 require 'rubygems'
 require 'rake'
+require 'spec/rake/spectask'
 
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "stocktwits"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{ Stocktwits.com API wrapper}
+    gem.description = %Q{ Provide an OAuth, Basic HTTP authentication and plain interfaces to the StockTwits API.}
     gem.email = "elad@eizesus.com"
     gem.homepage = "http://github.com/eladmeidar/stocktwits"
     gem.authors = ["Elad Meidar"]
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
+    gem.add_dependency 'ezcrypto'
+    gem.add_dependency 'oauth'
+    gem.add_dependency 'json'
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
@@ -40,7 +44,14 @@ end
 
 task :test => :check_dependencies
 
-task :default => :test
+desc 'Default: run specs.'
+task :default => :spec
+
+desc 'Run the specs'
+Spec::Rake::SpecTask.new(:spec) do |t|
+  t.spec_opts = ['--colour --format progress --loadby mtime --reverse']
+  t.spec_files = FileList['spec/**/*_spec.rb']
+endt
 
 require 'rake/rdoctask'
 Rake::RDocTask.new do |rdoc|

@@ -13,6 +13,9 @@ end
 
 class User < Stocktwits::GenericUser; end
 
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+
 require 'remarkable'
 require File.dirname(__FILE__) + '/fixtures/factories'
 require File.dirname(__FILE__) + '/fixtures/fakeweb'
