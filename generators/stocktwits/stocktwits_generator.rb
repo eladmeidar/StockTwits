@@ -7,7 +7,7 @@ class TwitterAuthGenerator < Rails::Generator::Base
 
       m.migration_template 'migration.rb', 'db/migrate', :migration_file_name => 'stocktwits_migration'
       m.template 'user.rb', File.join('app','models','user.rb')
-      m.template 'stocktwits.yml', File.join('config','twitter_auth.yml')
+      m.template 'stocktwits.yml', File.join('config','stocktwits.yml')
     end
   end
 
