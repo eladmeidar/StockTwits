@@ -12,10 +12,11 @@ module Stocktwits
 
     module ClassMethods
       def verify_credentials(login, password)
-        response = Stocktwits.net.start { |http|
-          request = Net::HTTP::Get.new("/users/show/#{login}.json")
-          http.request(request)
-        }
+      
+        response =  Stocktwits.net.start { |http|
+                  request = Net::HTTP::Get.new(Stocktwits.base_url + "/users/show/#{login}.json")
+                  http.request(request)
+                }
 
         if response.code == '200'
           JSON.parse(response.body)

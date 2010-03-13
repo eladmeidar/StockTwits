@@ -29,7 +29,8 @@ module Stocktwits
             if match = response.body.match(/<error>(.*)<\/error>/)
               match[1]
             else
-              'An error occurred processing your Stocktwits request.'
+              raise response.body
+              'An error occurred processing your Stocktwits request. '
             end
           end
 

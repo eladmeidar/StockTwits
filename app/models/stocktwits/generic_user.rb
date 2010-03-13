@@ -48,7 +48,9 @@ module Stocktwits
     def self.table_name; 'users' end
 
     def self.new_from_stocktwits_hash(hash)
-      raise ArgumentError, 'Invalid hash: must include screen_name.' unless hash.key?('login')
+      raise ArgumentError, "Expected a 'user' key in attributes hash, got: #{hash.keys.inspect}" unless hash.key?('user')
+      hash = hash['user']
+      raise ArgumentError, "Invalid hash: must include login." unless hash.key?('login')
 
       raise ArgumentError, 'Invalid hash: must include id.' unless hash.key?('id')
 
@@ -56,7 +58,7 @@ module Stocktwits
       user.stocktwits_id = hash['id'].to_s
       user.login = hash['login']
 
-      assign_stocktwits_attributes(hash)
+      user.assign_stocktwits_attributes(hash)
       
       user
     end
@@ -67,11 +69,11 @@ module Stocktwits
       
     def assign_stocktwits_attributes(hash)
       STOCKTWITS_FIELDS.each do |att|
-        user.send("#{att}=", hash[att.to_s]) if user.respond_to?("#{att}=")
+        send("#{att}=", hash[att.to_s]) if self.respond_to?("#{att}=")
       end
       
       STOCKTWITS_PROFILE_FIELDS.each do |att|
-        user.send("#{att}=", hash['profile'][att.to_s]) if user.respond_to?("#{att}=")
+        send("#{att}=", hash['profile'][att.to_s]) if self.respond_to?("#{att}=")
       end
     end
 

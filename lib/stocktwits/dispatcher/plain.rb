@@ -15,7 +15,6 @@ module Stocktwits
       def request(http_method, path, body=nil, *arguments)
         path = Stocktwits.path_prefix + path
         path = append_extension_to(path)
-
         response = Stocktwits.net.start{ |http|
           req = "Net::HTTP::#{http_method.to_s.capitalize}".constantize.new(path, *arguments)
           req.set_form_data(body) unless body.nil?
